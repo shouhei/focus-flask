@@ -1,7 +1,7 @@
 import os
 
 class Config(object):
-    if os.environ == 'production':
+    if 'FOCUS_ENV' in os.environ and os.environ['FOCUS_ENV'] == 'production':
         DATABASE_URI = ''
         DEBUG = False
         TESTING = False
