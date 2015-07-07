@@ -8,5 +8,5 @@ class Config(object):
     else:
         DEBUG = True
         TESTING = True
-        DATABASE_URI = 'mysql://root@localhost/focus_development'
+        DATABASE_URI = 'mysql+pymysql://root@localhost/focus_development'
 
