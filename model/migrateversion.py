@@ -1,7 +1,8 @@
-from database import METADATA
-class MigrateVersion(object):
-    table = METADATA.tables["migrate_version"]
+from model.model import AppModel
+class MigrateVersion(AppModel):
+    __tablename__ = 'migrate_version'
 
     @classmethod
-    def all(self):
-        return self.table.select().execute()
+    def all(cls):
+        session = cls._get_session()
+        return session.query(cls).all()

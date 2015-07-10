@@ -17,5 +17,7 @@ class Example(FlaskView):
         datas = MigrateVersion.all()
         returns = []
         for data in datas:
-            returns.append(dict(data))
+            returns.append({'repository_id':data.repository_id,
+                            'repository_path':data.repository_path,
+                            'version':data.version})
         return jsonify(status=200, message='ok',request=request.form, response=returns)
