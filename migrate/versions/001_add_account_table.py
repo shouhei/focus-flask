@@ -16,6 +16,7 @@ users = Table(
     'users', meta,
     Column('id', Integer, primary_key=True),
     Column('name', String(255), nullable=False),
+    Column('mail_address', String(255), nullable=False),
     Column('password', String(255), nullable=False),
     Column('organization_id', ForeignKey('organizations.id')),
     Column('created_at', DateTime, server_default=func.now(), nullable=False),
