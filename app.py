@@ -1,11 +1,12 @@
+import re
+import inspect
+import os
 from flask import Flask
 from flask import request, abort, jsonify, g
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import DeferredReflection
-
-from controller.example import Example
-from controller.user import UserView
+import controller
 from model.model import AppModel
 
 # prepare application
@@ -13,8 +14,10 @@ app = Flask(__name__)
 app.config.from_object('config.Config')
 
 # prepare controller
-Example.register(app)
-UserView.register(app)
+for pack in os.listdir(controller.__path__[0])[2:]:
+    data = __import__(inspect.getmodulename("controller."+pack), fromlist=['controller'])
+    for view in filter(lambda item: (re.search("[^Flask]View$", item[0])), inspect.getmembers(data,inspect.isclass)):
+        view[1].register(app)
 
 
 # prepare database and model
