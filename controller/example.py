@@ -2,7 +2,7 @@ from flask import request, abort, jsonify
 from flask.ext.classy import FlaskView, route
 from model.migrateversion import MigrateVersion
 
-class Example(FlaskView):
+class ExampleView(FlaskView):
     route_base = '/example'
     @route('success')
     def success(self):
