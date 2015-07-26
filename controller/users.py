@@ -7,7 +7,7 @@ from random import randint
 from model.user import User
 from model.timer import Timer
 
-class UserView(FlaskView):
+class UsersView(FlaskView):
     def index(self, id):
         pass
 
