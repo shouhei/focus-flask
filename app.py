@@ -30,6 +30,8 @@ DeferredReflection.prepare(engine)
 # for global action
 @app.before_request
 def before_request():
+    if(request.path == '/users/' and request.method == "POST"):
+        return
     user = User.find_by(token=request.headers.get('Authorized_Token'))
     if not user:
         abort(401)
