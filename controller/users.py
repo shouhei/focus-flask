@@ -20,7 +20,7 @@ class UsersView(FlaskView):
                  'spot':{
                      'id':row.spot_id,
                      'name':row.spot.name,
-                     'foursquare_id':row.spot.forsquare_id
+                     'foursquare_id':row.spot.forsquare_id,
                      'latlng':row.spot.latlng
                  },
                  'created_at': row.created_at.strftime("%Y年%m月%d日 %H時%M分~")
