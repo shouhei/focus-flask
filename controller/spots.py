@@ -4,7 +4,7 @@ from sqlalchemy import func
 from model.spot import Spot
 from model.timer import Timer
 
-class SpotView(FlaskView):
+class SpotsView(FlaskView):
     def index(self):
         spots = Spot.all()
         res = []
