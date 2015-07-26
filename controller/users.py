@@ -8,8 +8,24 @@ from model.user import User
 from model.timer import Timer
 
 class UsersView(FlaskView):
-    def index(self, id):
-        pass
+
+    def index(self):
+        session = Timer._get_session()
+        timer = session.query(Timer).filter(Timer.user_id==1,Timer.end_at!=None).all()
+        res = []
+        for row in timer:
+            res.append(
+                {'id':row.id,
+                 'result_time': row.result_time,
+                 'spot':{
+                     'id':row.spot_id,
+                     'name':row.spot.name,
+                     'latlng':row.spot.latlng
+                 },
+                 'created_at': row.created_at.strftime("%Y年%m月%d日 %H時%M分~")
+                }
+            )
+        return jsonify(status=200, message="ok",request=request.form, response=res)
 
     def post(self):
         post_data = self.__check_request(request.form)
@@ -27,28 +43,11 @@ class UsersView(FlaskView):
     def __check_request(self, post):
         rtn_ary = {}
         if 'name' in post:
-            rtn_ary['name'] = post['name']
+            abort(400)
         if 'mail_address' in post and validate_email(post['mail_address']):
-            rtn_ary['mail_address'] = post['mail_address']
+            abort(400)
         if 'password' in post:
-            rtn_ary['password'] = post['password']
-        return rtn_ary
+            abort(400)
+        return post
 
 
-    def history(self):
-        session = Timer._get_session()
-        timer = session.query(Timer).filter(Timer.user_id==1,Timer.end_at!=None).all()
-        res = []
-        for row in timer:
-            res.append(
-                {'id':row.id,
-                 'result_time': row.result_time,
-                 'spot':{
-                     'id':row.spot_id,
-                     'name':row.spot.name,
-                     'latlng':row.spot.latlng
-                 },
-                 'created_at': row.created_at.strftime("%Y年%m月%d日 %H時%M分~")
-                }
-            )
-        return jsonify(status=200, message="ok",request=request.form, response=res)
