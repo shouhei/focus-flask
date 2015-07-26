@@ -45,6 +45,10 @@ def after_request(*args, **kwargs):
 def error500(error):
     return jsonify(status=error.code, message=error.description, request=request.form, response='')
 
+@app.errorhandler(400)
+def error400(error):
+    return jsonify(status=error.code, message=error.description, request=request.form, response='')
+
 @app.errorhandler(401)
 def error401(error):
     return jsonify(status=error.code, message=error.description, request=request.form, response='')
