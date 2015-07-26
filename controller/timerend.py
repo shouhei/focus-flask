@@ -17,14 +17,14 @@ class TimerEndView(FlaskView):
             [hours, minutes] = divmod(tmp_minutes,60)
             result_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
             timer.update(
-                         end_at=request.form['end_at'],
+                         end_at=checked_request['end_at'],
                          result_time=result_time
             )
         return jsonify(status=200, message='ok', request=request.form, response="")
 
-    def __check_request(post):
+    def __check_request(self, post):
         if not 'id' in post:
             abort(400)
-        if not 'checked_request' in post:
+        if not 'end_at' in post:
             abort(400)
         return post

@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import DeferredReflection
 import controller
 from model.model import AppModel
+from model.user import User
 
 # prepare application
 app = Flask(__name__)
@@ -29,7 +30,10 @@ DeferredReflection.prepare(engine)
 # for global action
 @app.before_request
 def before_request():
-    pass
+    user = User.find_by(token=request.headers.get('Authorized_Token'))
+    if not user:
+        abort(401)
+    setattr(g,'user',user)
 
 @app.after_request
 def after_request(*args, **kwargs):
@@ -39,6 +43,10 @@ def after_request(*args, **kwargs):
 
 @app.errorhandler(500)
 def error500(error):
+    return jsonify(status=error.code, message=error.description, request=request.form, response='')
+
+@app.errorhandler(401)
+def error401(error):
     return jsonify(status=error.code, message=error.description, request=request.form, response='')
 
 @app.errorhandler(404)
