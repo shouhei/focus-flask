@@ -35,7 +35,7 @@ mongo = MongoClient()
 def before_request():
     if(request.path == '/users/' and request.method == "POST"):
         return
-    user = User.find_by(token=request.headers.get('Authorized_Token'))
+    user = User.find_by(token=request.headers.get('Authorized-Token'))
     if not user:
         abort(401)
     setattr(g,'user',user)
