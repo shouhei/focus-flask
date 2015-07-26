@@ -14,7 +14,7 @@ class TimerEndView(FlaskView):
             res = datetime.strptime(request.form['end_at'],'%Y-%m-%d %H:%M:%S') - timer.start_at
             [tmp_minutes, seconds] = divmod(res.total_seconds(), 60)
             [hours, minutes] = divmod(tmp_minutes,60)
-            result_time = '%03d:%02d:%02d' % (hours, minutes, seconds)
+            result_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
             timer.update(
                          end_at=request.form['end_at'],
                          result_time=result_time
