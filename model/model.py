@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import DeferredReflection
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
+from sqlalchemy import Column, Integer
 import datetime
 from contextlib import contextmanager
 
