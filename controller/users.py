@@ -6,6 +6,7 @@ from random import randint
 
 from model.user import User
 from model.timer import Timer
+from model.organization import Organization
 
 class UsersView(FlaskView):
 
@@ -32,11 +33,12 @@ class UsersView(FlaskView):
         post_data = self.__check_request(request.form)
         source = string.digits + string.ascii_letters
         token = ''.join(map(str, [source[randint(0, len(source) -1) ] for x in range(0,18)]))
+        org = Organization.find(1)
         user = User(name=post_data['name'],
                     mail_address=post_data['mail_address'],
                     password=post_data['password'],
                     token=token,
-                    organization_id=1
+                    organization_id=org.id
         )
         user.insert()
         return jsonify(status=200, message='ok', request=request.form, response={'token':token})
