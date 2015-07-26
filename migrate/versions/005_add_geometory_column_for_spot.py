@@ -10,7 +10,7 @@ class Geometory(UserDefinedType):
 def upgrade(migrate_engine):
     meta = MetaData(bind=migrate_engine)
     spots = Table('spots', meta, autoload=True)
-    latlng = Column('latlng', String(255), nullable=False)
+    latlng = Column('latlng', Geometory, nullable=False)
     latlng.create(spots)
 
 
