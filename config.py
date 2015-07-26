@@ -8,5 +8,5 @@ class Config(object):
     else:
         DEBUG = True
         TESTING = True
-        DATABASE = 'mysql+pymysql://root@localhost/focus_development'
+        DATABASE = 'mysql+pymysql://root@localhost/focus_development?charset=utf8'
 
