@@ -1,4 +1,4 @@
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, g
 from flask.ext.classy import FlaskView, route
 from validate_email import validate_email
 import string
@@ -11,7 +11,7 @@ class UsersView(FlaskView):
 
     def index(self):
         session = Timer._get_session()
-        timer = session.query(Timer).filter(Timer.user_id==1,Timer.end_at!=None).all()
+        timer = session.query(Timer).filter(Timer.user_id==g.user.id,Timer.end_at!=None).all()
         res = []
         for row in timer:
             res.append(
