@@ -17,6 +17,11 @@ class AppModel(DeferredReflection, Base):
             setattr(self, key, value)
 
     @classmethod
+    def all(cls):
+        session = cls._get_session()
+        return session.query(cls).all()
+
+    @classmethod
     def find(cls, id_):
         session = cls._get_session()
         return session.query(cls).filter_by(id=id_).first()
