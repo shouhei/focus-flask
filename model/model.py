@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer
 import datetime
 from contextlib import contextmanager
+from flask import abort
 
 Base=declarative_base()
 
@@ -64,5 +65,6 @@ class AppModel(DeferredReflection, Base):
             session.commit()
         except:
             session.rollback()
+            abort(500)
         finally:
             session.commit()
