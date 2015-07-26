@@ -17,7 +17,6 @@ app.config.from_object('config.Config')
 for pack in filter(lambda item: re.search("\.py$",item), os.listdir(controller.__path__[0])):
     data = __import__(inspect.getmodulename("controller."+pack), fromlist=['controller'])
     for view in filter(lambda item: (re.search("^(?!Flask).*View$", item[0])), inspect.getmembers(data,inspect.isclass)):
-        print(view[1])
         view[1].register(app)
 
 
