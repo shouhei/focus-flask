@@ -1,9 +1,11 @@
 from flask import request, abort, jsonify
 from flask.ext.classy import FlaskView, route
-from model.user import User as User
 from validate_email import validate_email
 import string
 from random import randint
+
+from model.user import User
+from model.timer import Timer
 
 class UserView(FlaskView):
     def index(self, id):
@@ -32,3 +34,21 @@ class UserView(FlaskView):
             rtn_ary['password'] = post['password']
         return rtn_ary
 
+
+    def history(self):
+        session = Timer._get_session()
+        timer = session.query(Timer).filter(Timer.user_id==1,Timer.end_at!=None).all()
+        res = []
+        for row in timer:
+            res.append(
+                {'id':row.id,
+                 'result_time': row.result_time,
+                 'spot':{
+                     'id':row.spot_id,
+                     'name':row.spot.name,
+                     'latlng':row.spot.latlng
+                 },
+                 'created_at': row.created_at.strftime("%Y年%m月%d日 %H時%M分~")
+                }
+            )
+        return jsonify(status=200, message="ok",request=request.form, response=res)
