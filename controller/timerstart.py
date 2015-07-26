@@ -7,8 +7,7 @@ class TimerStartView(FlaskView):
 
     def post(self):
         checked_request = self.__check_request(request.form)
-        spot = Spot.find_by(forsquare_id=checked_request['foursquare_id'])
-        if not spot:
+        if not Spot.find_by(forsquare_id=checked_request['foursquare_id']):
             checked_request = self.__re_check_request(request.form)
             spot = Spot(
                 forsquare_id=checked_request['foursquare_id'],
@@ -16,6 +15,7 @@ class TimerStartView(FlaskView):
                 latlng= 'POINT('+ checked_request['lng'] +' '+ checked_request['lat'] + ")"
             )
             spot.insert()
+        spot = Spot.find_by(forsquare_id=checked_request['foursquare_id'])
         with Timer.transaction():
             timer = Timer(user_id=g.user.id,
                           spot_id=spot.id,

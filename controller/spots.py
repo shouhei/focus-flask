@@ -1,8 +1,9 @@
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, g
 from flask.ext.classy import FlaskView, route
 from sqlalchemy import func
 from model.spot import Spot
 from model.timer import Timer
+from bson.json_util import dumps
 
 class SpotsView(FlaskView):
 
@@ -26,19 +27,7 @@ class SpotsView(FlaskView):
         if not spot:
             abort(500)
         res = []
-        sum_label = func.sec_to_time(func.sum(func.time_to_sec(Timer.result_time))).label('sum')
-        timer = session.query(Timer, sum_label).filter(Timer.end_at!=None, Timer.spot_id==spot.id).group_by(Timer.user_id).order_by(sum_label.desc()).all()
-        n = 0
-        for row in timer:
-            n += 1;
-            res.append(
-                {
-                    'rank':n,
-                    'user':{
-                        'id':row[0].user.id,
-                        'name':row[0].user.name
-                    },
-                    'sum':str(row.sum)
-                }
-            )
-        return jsonify(status=200, message='ok', request={'id':id}, response=res)
+        f = g.mongo.focus
+        print(f)
+        rank = f.ranking
+        return jsonify(status=200, message='ok', request={'id':id}, response=rank.find_one({'spot_id':int(id)},{"_id":0}))

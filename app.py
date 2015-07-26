@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import DeferredReflection
 import controller
 from model.model import AppModel
 from model.user import User
+from pymongo import MongoClient
 
 # prepare application
 app = Flask(__name__)
@@ -26,6 +27,8 @@ engine = create_engine(app.config['DATABASE'])
 Session = scoped_session(sessionmaker(bind=engine))
 AppModel._set_session(Session)
 DeferredReflection.prepare(engine)
+mongo = MongoClient()
+
 
 # for global action
 @app.before_request
@@ -36,6 +39,7 @@ def before_request():
     if not user:
         abort(401)
     setattr(g,'user',user)
+    setattr(g,'mongo', MongoClient())
 
 @app.after_request
 def after_request(*args, **kwargs):
