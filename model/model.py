@@ -1,7 +1,8 @@
 from sqlalchemy.ext.declarative import DeferredReflection
 from sqlalchemy.ext.declarative import declarative_base
-import datetime
 from sqlalchemy import Column
+import datetime
+from contextlib import contextmanager
 
 Base=declarative_base()
 
@@ -48,3 +49,15 @@ class AppModel(DeferredReflection, Base):
     @classmethod
     def _set_session(cls, Session):
         cls.Session = Session
+
+    @classmethod
+    @contextmanager
+    def transaction(cls):
+        session = cls.Session()
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            session.commit()
