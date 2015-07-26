@@ -8,6 +8,7 @@ Base=declarative_base()
 class AppModel(DeferredReflection, Base):
     __abstract__ = True
 
+    id = Column(Integer, primary_key=True)
     modified_at = Column('modified_at',default=datetime.datetime.now)
 
     def __init__(self, **kwargs):
