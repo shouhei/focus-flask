@@ -7,7 +7,7 @@ class Password(TypeDecorator):
     def process_bind_param(self, value, engine):
         sha = hashlib.sha256()
         sha.update(value.encode('utf-8'))
-        return sha.digest()
+        return str(sha.digest())
 
 class User(AppModel):
     __tablename__ = 'users'
