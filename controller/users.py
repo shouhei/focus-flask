@@ -43,11 +43,11 @@ class UsersView(FlaskView):
 
     def __check_request(self, post):
         rtn_ary = {}
-        if 'name' in post:
+        if not 'name' in post:
             abort(400)
-        if 'mail_address' in post and validate_email(post['mail_address']):
+        if not 'mail_address' in post and not validate_email(post['mail_address']):
             abort(400)
-        if 'password' in post:
+        if not 'password' in post:
             abort(400)
         return post
 
