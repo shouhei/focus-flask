@@ -31,9 +31,9 @@ class AppModel(DeferredReflection, Base):
         session.add(self)
         return self.id
 
-    def update(self, id_, **kwargs):
+    def update(self, **kwargs):
         session = self._get_session()
-        row = self.find(id_)
+        row = self
         for key, value in kwargs.items():
             setattr(row, key, value)
         session.add(row)
