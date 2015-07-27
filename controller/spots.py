@@ -35,7 +35,7 @@ class SpotsView(FlaskView):
     def owners(self):
         db = g.mongo
         f = db.focus
-        result = f.ranking.find({},{"spot_id":1,"data":{"$elemMatch":{"rank":1}},"_id":0})
+        result = f.ranking.find({},{"spot_id":1,"spot":1,"data":{"$elemMatch":{"rank":1}},"_id":0})
         for_res = []
         for item in result:
             for_res.append(item)
