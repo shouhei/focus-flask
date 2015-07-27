@@ -11,7 +11,7 @@ class Geometry(UserDefinedType):
         return func.GeomFromText(bindvalue, type_=self)
 
     def column_expression(self, col):
-        return func.GeomFromText(col, type_=self)
+        return func.ASTEXT(col, type_=self)
 
 class Spot(AppModel):
     __tablename__ = 'spots'
