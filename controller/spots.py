@@ -31,3 +31,12 @@ class SpotsView(FlaskView):
         print(f)
         rank = f.ranking
         return jsonify(status=200, message='ok', request={'id':id}, response=rank.find_one({'spot_id':int(id)},{"_id":0}))
+
+    def owners(self):
+        db = g.mongo
+        f = db.focus
+        result = f.ranking.find({},{"spot_id":1,"data":{"$elemMatch":{"rank":1}},"_id":0})
+        for_res = []
+        for item in result:
+            for_res.append(item)
+        return jsonify(status=200,message='ok',request="",response=for_res)
