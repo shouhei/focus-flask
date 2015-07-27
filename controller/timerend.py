@@ -2,8 +2,10 @@ from flask import request, abort, jsonify, g
 from flask.ext.classy import FlaskView, route
 from model.migrateversion import MigrateVersion
 from model.timer import Timer
+from model.spot import Spot
 from datetime import datetime
 from sqlalchemy import func
+import re
 
 class TimerEndView(FlaskView):
 
@@ -44,9 +46,17 @@ class TimerEndView(FlaskView):
                     'sum':str(row.sum)
                 }
             )
+        [lat,lng] = re.findall('[0-9]*\.[0-9]*', timer.spot.latlng)
         doc = g.mongo.focus
         rank = doc.ranking
-        rank.update( {'spot_id': timer.spot.id} ,{'$set':{'data':ranking}}, upsert=True, multi=False)
+        rank.update( {'spot_id': timer.spot.id},
+                     {'$set':{'data':ranking,'spot':{'name':timer.spot.name,
+                                                     'lat':lat,
+                                                     'lng':lng,
+                     }
+                     }},
+                      upsert=True,
+                      multi=False)
         # end ranking update
         return jsonify(status=200, message='ok', request=request.form, response="")
 
