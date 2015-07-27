@@ -46,7 +46,7 @@ class TimerEndView(FlaskView):
                     'sum':str(row.sum)
                 }
             )
-        [lat,lng] = re.findall('[0-9]*\.[0-9]*', timer.spot.latlng)
+        [lng,lat] = re.findall('[0-9]*\.[0-9]*', timer.spot.latlng)
         doc = g.mongo.focus
         rank = doc.ranking
         rank.update( {'spot_id': timer.spot.id},
