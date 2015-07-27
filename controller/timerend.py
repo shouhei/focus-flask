@@ -12,13 +12,13 @@ class TimerEndView(FlaskView):
     def post(self):
         checked_request = self.__check_request(request.form)
         timer = Timer.find(checked_request['id'])
+        if not timer:
+            abort(404)
+        res = datetime.strptime(checked_request['end_at'],'%Y-%m-%d %H:%M:%S') - timer.start_at
+        [tmp_minutes, seconds] = divmod(res.total_seconds(), 60)
+        [hours, minutes] = divmod(tmp_minutes,60)
+        result_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
         with Timer.transaction():
-            if not timer:
-                abort(404)
-            res = datetime.strptime(checked_request['end_at'],'%Y-%m-%d %H:%M:%S') - timer.start_at
-            [tmp_minutes, seconds] = divmod(res.total_seconds(), 60)
-            [hours, minutes] = divmod(tmp_minutes,60)
-            result_time = '%02d:%02d:%02d' % (hours, minutes, seconds)
             timer.update(
                          end_at=checked_request['end_at'],
                          result_time=result_time
@@ -34,8 +34,14 @@ class TimerEndView(FlaskView):
                         .all())
         n = 0
         ranking = []
+        res={}
         for row in ranking_data:
             n += 1;
+            if row[0].user.id == g.user.id:
+                res['rank'] = n
+                res['user_name'] = row[0].user.name
+                res['spot_name'] = row[0].spot.name
+                res['result_time'] = result_time
             ranking.append(
                 {
                     'rank':n,
@@ -58,7 +64,7 @@ class TimerEndView(FlaskView):
                       upsert=True,
                       multi=False)
         # end ranking update
-        return jsonify(status=200, message='ok', request=request.form, response="")
+        return jsonify(status=200, message='ok', request=request.form, response=res)
 
     def __check_request(self, post):
         if not 'id' in post:
