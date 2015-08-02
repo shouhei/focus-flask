@@ -12,7 +12,7 @@ class UsersView(FlaskView):
 
     def index(self):
         session = Timer._get_session()
-        timer = session.query(Timer).filter(Timer.user_id==g.user.id,Timer.end_at!=None).all()
+        timer = session.query(Timer).filter(Timer.user_id==g.user.id,Timer.end_at!=None).order_by(Timer.created_at.desc()).all()
         res = []
         for row in timer:
             res.append(
