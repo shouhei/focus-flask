@@ -47,6 +47,19 @@ def after_request(*args, **kwargs):
     session.commit()
     return args[0]
 
+@app.teardown_appcontext
+def shutdown_session(response_or_exc):
+    session = Session()
+    try:
+        print("here")
+        if response_or_exc is None:
+            session.commit()
+    finally:
+        print("here2")
+        session.close()
+    print("here3")
+    return response_or_exc
+
 @app.errorhandler(500)
 def error500(error):
     return jsonify(status=error.code, message=error.description, request=request.form, response='')
